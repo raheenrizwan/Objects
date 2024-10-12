@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <h1>Population Survey Form</h1>
+  <form id="surveyForm">
+    <label>Name: </label>
+    <input type="text" id="name" required><br><br>
+
+    <label>Gender: </label>
+    <input type="radio" name="gender" value="Male" required> Male
+    <input type="radio" name="gender" value="Female" required> Female<br><br>
+
+    <label>Address: </label>
+    <input type="text" id="address" required><br><br>
+
+    <label>Education: </label>
+    <select id="education" required>
+      <option value="Matric">Matric</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Bachelor">Bachelor</option>
+      <option value="Master">Master</option>
+    </select><br><br>
+
+    <label>Profession: </label>
+    <select id="profession" required>
+      <option value="Teacher">Teacher</option>
+      <option value="Engineer">Engineer</option>
+      <option value="Doctor">Doctor</option>
+      <option value="Student">Student</option>
+    </select><br><br>
+
+    <button type="submit">Save Record</button>
+  </form>
+
+  <h2>All Saved Records</h2>
+  <div id="records"></div>
+
+
+    <script>
+        //Question  no 1
+        var itemsArray = [ 
+  { name: "juice", price: "50", quantity: "3" }, 
+  { name: "cookie", price: "30", quantity: "9" }, 
+  { name: "shirt", price: "880", quantity: "1" }, 
+  { name: "pen", price: "100", quantity: "2" }
+];
+
+let totalCost = 0;
+
+itemsArray.forEach(item => {
+  let itemTotal = parseInt(item.price) * parseInt(item.quantity);
+  console.log(`Total price of ${item.name}: ${itemTotal}`);
+  totalCost += itemTotal;
+});
+
+console.log(`Total price of all items: ${totalCost}`);
+
+//Question no 2
+
+
+let user = {
+  name: "Ali",
+  email: "ali@example.com",
+  password: "12345",
+  age: 25,
+  gender: "Male",
+  city: "Karachi",
+  country: "Pakistan"
+};
+
+
+console.log("Does 'age' exist in object? ", 'age' in user); 
+console.log("Does 'country' exist in object? ", user.hasOwnProperty('country'));
+
+
+console.log("Does 'firstName' exist in object? ", 'firstName' in user);
+console.log("Does 'lastName' exist in object? ", user.hasOwnProperty('lastName'));
+
+//Question no 3
+
+function Person(name, email, age, gender, city, country) {
+  this.name = name;
+  this.email = email;
+  this.age = age;
+  this.gender = gender;
+  this.city = city;
+  this.country = country;
+}
+
+let person1 = new Person("Ali", "ali@example.com", 25, "Male", "Karachi", "Pakistan");
+let person2 = new Person("Sara", "sara@example.com", 30, "Female", "Lahore", "Pakistan");
+let person3 = new Person("John", "john@example.com", 22, "Male", "New York", "USA");
+
+console.log(person1);
+console.log(person2);
+console.log(person3);
+
+//Question no 4
+
+function Person(name, gender, address, education, profession) {
+  this.name = name;
+  this.gender = gender;
+  this.address = address;
+  this.education = education;
+  this.profession = profession;
+}
+
+
+document.getElementById("surveyForm").addEventListener("submit", function (e) {
+  e.preventDefault(); 
+
+ 
+  const name = document.getElementById("name").value;
+  const gender = document.querySelector('input[name="gender"]:checked').value;
+  const address = document.getElementById("address").value;
+  const education = document.getElementById("education").value;
+  const profession = document.getElementById("profession").value;
+
+
+  const person = new Person(name, gender, address, education, profession);
+
+  saveRecord(person);
+
+
+  displayRecords();
+
+
+  document.getElementById("surveyForm").reset();
+});
+
+
+function saveRecord(person) {
+  let records = JSON.parse(localStorage.getItem("populationRecords")) || [];
+  records.push(person);
+  localStorage.setItem("populationRecords", JSON.stringify(records));
+}
+function displayRecords() {
+  const records = JSON.parse(localStorage.getItem("populationRecords")) || [];
+  const recordsDiv = document.getElementById("records");
+  recordsDiv.innerHTML = "";
+
+  records.forEach((record, index) => {
+    recordsDiv.innerHTML += `
+      <p>
+        <strong>Record ${index + 1}:</strong><br>
+        Name: ${record.name}<br>
+        Gender: ${record.gender}<br>
+        Address: ${record.address}<br>
+        Education: ${record.education}<br>
+        Profession: ${record.profession}
+      </p><hr>
+    `;
+  });
+}
+
+window.onload = displayRecords;
+
+
+
+
+    </script>
+</body>
+</html>
